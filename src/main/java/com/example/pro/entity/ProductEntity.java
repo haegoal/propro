@@ -10,7 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 
-@Setter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PRIVATE)
 @Getter
 @ToString
 @Entity

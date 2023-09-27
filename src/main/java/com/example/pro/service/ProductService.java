@@ -20,4 +20,19 @@ public class ProductService {
         ProductEntity productEntity = productRepository.findByModelCodeContaining(query);
         return ProductDTO.toDTO(productEntity);
     }
+
+    public ProductDTO findByProductCodeContaining(String query) {
+        ProductEntity productEntity = productRepository.findByProductCodeContaining(query);
+        return ProductDTO.toDTO(productEntity);
+    }
+
+    public ProductDTO findByProductNameContaining(String query) {
+        ProductEntity productEntity = productRepository.findByProductNameContaining(query);
+        return ProductDTO.toDTO(productEntity);
+    }
+    public ProductDTO findByModelNameContaining(String query) {
+        ProductEntity productEntity = productRepository.findByModelNameContaining(query);
+        return ProductDTO.toDTO(productEntity);
+    }
+
 }

@@ -9,11 +9,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 
-@Setter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PRIVATE)
 @Getter
 @ToString
 @Entity
-@Table(name = "student_table")
+@Table(name = "user_table")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

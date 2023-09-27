@@ -22,7 +22,21 @@ public class ProductController {
         System.out.println("key = " + key + ", query = " + query);
         if(key.equals("ModelCode")){
             ProductDTO productDTO = productService.findByModelCodeContaining(query);
-            System.out.println("productDTO = " + productDTO);
+            if(productDTO!=null){
+                return new ResponseEntity<>(productDTO, HttpStatus.OK);
+            }
+        }else if(key.equals("productCode")){
+            ProductDTO productDTO = productService.findByProductCodeContaining(query);
+            if(productDTO!=null){
+                return new ResponseEntity<>(productDTO, HttpStatus.OK);
+            }
+        }else if(key.equals("productName")){
+            ProductDTO productDTO = productService.findByProductNameContaining(query);
+            if(productDTO!=null){
+                return new ResponseEntity<>(productDTO, HttpStatus.OK);
+            }
+        }else if(key.equals("modelName")){
+            ProductDTO productDTO = productService.findByModelNameContaining(query);
             if(productDTO!=null){
                 return new ResponseEntity<>(productDTO, HttpStatus.OK);
             }

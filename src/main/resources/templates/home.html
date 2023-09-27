@@ -8,7 +8,14 @@
 <!--<div th:replace="~{component/nav :: nav}"></div>-->
 
 <div class="container">
-  <div th:replace="~{main/product :: product}"></div>
+  <div class="row">
+    <div class="col-6">
+    <div th:replace="~{main/product :: product}"></div>
+      </div>
+    <div class="col">
+    <div th:replace="~{main/customer :: customer}"></div>
+    </div>
+  </div>
 </div>
 
 <div th:replace="~{component/footer :: footer}"></div>

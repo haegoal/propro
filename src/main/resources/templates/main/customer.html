@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<!--<div th:replace="~{component/header :: header}"></div>-->
+<!--<div th:replace="~{component/nav :: nav}"></div>-->
+
+<div th:fragment="customer" id="customer">
+  <form name="frm3" class="card p-3">
+    <div class="row">
+      <div class="col-6 col-sm-6 col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">전화번호</span>
+          <input class="form-control" id="customer-phone" name="customerPhone" oninput='isNumber(this); handleOnInput(this, 20);' autocomplete='off'/>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <i class="bi bi-telephone-outbound-fill"></i>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-6 col-sm-6 col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">연락처</span>
+          <input class="form-control" name="customerMobile" oninput='isNumber(this); handleOnInput(this, 20);' autocomplete='off'/>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-6 col-sm-6 col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">성함</span>
+          <input class="form-control" name="customerName" readonly>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-9">
+        <div class="input-group">
+          <span class="input-group-text">주소</span>
+          <input class="form-control" name="customerAddress1" readonly>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center mt-1">
+      <div class="col-10">
+        <div class="input-group">
+          <input class="form-control" name="customerAddress2" readonly>
+        </div>
+      </div>
+    </div>
+  </form>
+
+<div class="modal fade" id="modal_customer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">고객정보등록</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        없는 고객입니다. 등록하시겠습니까?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="cus_insert">등록</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+<!--  <jsp:include page="/customer/insert.jsp"/>-->
+</div>
+<div>
+<!--  <jsp:include page="/customer/insert2.jsp"/>-->
+</div>
+<div>
+<!--  <jsp:include page="/customer/list.jsp"/>-->
+</div>
+
+<div th:replace="~{component/footer :: footer}"></div>
+  <script>
+
+    // $("#cus_insert").on("click", function(){
+    //   $(frm3.cname).val("");
+    //   $(frm3.caddress1).val("");
+    //   $(frm3.caddress2).val("");
+    //   $("#modal_customer").modal("hide");
+    //   $("#modal_insert2").modal("show");
+    // })
+
+
+    document.getElementById('customer-phone').addEventListener('keyup', function (event) {
+      if (event.key == 'Enter') {
+          const customerPhone = $(frm3.customerPhone).val();
+          const customerMobile = $(frm3.customerMobile).val();
+          if(customerPhone==""){
+            alert("번호 입력바람!");
+          }else {
+            $.ajax({
+              type: "get",
+              data: {customerPhone},
+              url: "/customer/read",
+              success: function (data) {
+                console.log(data)
+                // $("#modal_list").modal("show");
+                // const temp = Handlebars.compile($("#temp_cus").html());
+                // $("#div_cus").html(temp(data));
+              },error:function () {
+                // $("#modal_customer").modal("show");
+                // $(frm5.inputPhone).val(cphone)
+                // $(frm5.cphone2).val(cphone2)
+            }
+            })
+          }
+          }
+    });
+
+
+
+    function isNumber(item){
+      item.value=item.value.replace(/[^0-9]/g,'');
+    }
+
+    function handleOnInput(el, maxlength) {
+      if(el.value.length > maxlength)  {
+        el.value
+                = el.value.substr(0, maxlength);
+      }
+    }
+
+    function checkKor(str) {
+      const regExp = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+      if(regExp.test(str)){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  </script>
+</div>
+</body>
+</html>
