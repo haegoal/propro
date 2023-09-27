@@ -29,7 +29,7 @@ public class ProductEntity {
     @Column(length = 20, nullable = false)
     private String productName;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String modelName;
 
 //    @ColumnDefault("CURRENT_TIMESTAMP")

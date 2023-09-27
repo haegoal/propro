@@ -18,9 +18,11 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/read")
-    public ResponseEntity read(@RequestParam("key") String key,@RequestParam("query") String query){
-        if(key.equals("modelCode")){
+    public ResponseEntity read(@RequestParam("query") String query, @RequestParam("key") String key){
+        System.out.println("key = " + key + ", query = " + query);
+        if(key.equals("ModelCode")){
             ProductDTO productDTO = productService.findByModelCodeContaining(query);
+            System.out.println("productDTO = " + productDTO);
             if(productDTO!=null){
                 return new ResponseEntity<>(productDTO, HttpStatus.OK);
             }
