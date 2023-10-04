@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<!--<div th:replace="~{component/header :: header}"></div>-->
+<!--<div th:replace="~{component/nav :: nav}"></div>-->
+
+  <div th:fragment="skill" id="skill">
+    <div class="col">
+    <textarea rows="4" cols="80" th:placeholder="문의내용" th:class="mt-5"></textarea>
+    </div>
+    <div class="col">
+    <textarea rows="4" cols="80" th:placeholder="답변내용" th:class="mt-5"></textarea>
+    </div>
+  </div>
+
+
+</body>
+</html>

@@ -32,6 +32,4 @@ public class ProductEntity {
     @Column(length = 20)
     private String modelName;
 
-//    @ColumnDefault("CURRENT_TIMESTAMP")
-//    private String createdAt;
 }

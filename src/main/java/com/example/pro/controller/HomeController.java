@@ -9,4 +9,15 @@ public class HomeController {
     public String home(){
         return "home";
     }
+
+
+    @GetMapping("/skill")
+    public String skill(){
+        return "main/skill";
+    }
+
+    @GetMapping("/as")
+    public String as(){
+        return "main/as";
+    }
 }

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<!--<div th:replace="~{component/header :: header}"></div>-->
+<!--<div th:replace="~{component/nav :: nav}"></div>-->
+
+<div th:fragment="list" id="list">
+  <div class="modal fade" id="modal_list" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        </div>
+        <div class="modal-body">
+          <div id="div_cus"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="updateInsert_fn()">등록</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="list_cn()">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script id="temp_cus" type="text/x-handlebars-template">
+    <table class="table">
+      <th scope="col" class="text-center">연락처</th>
+      <th scope="col">성함</th>
+      <th colspan="2">주소</th>
+      <th colspan="2">추가주소</th>
+      {{#each .}}
+      <tr height="50px" style="cursor:pointer;" class="tr" id="{{id}}" customerPhone="{{customerPhone}}" onclick="read_fn(id)" >
+        <td class="text-center">{{customerPhone}}</td>
+        <td colspan="2">{{customerName}}</td>
+        <td>{{customerAddress1}}</td>
+        <td>{{customerAddress1}}</td>
+      </tr>
+      <div class="modal fade" id="modal_update{{id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel1">고객정보</h5>
+            </div>
+            <div class="modal-body">
+              <form class="row g-3" name="frm5">
+                <div class="col-md-6">
+                  <label for="updatePhone{{id}}" class="form-label">전화번호</label>
+                  <input class="form-control" name="updatePhone{{id}}" oninput='isNumber(this); handleOnInput(this, 15);' autocomplete='off' id="updatePhone{{id}}"/>
+                </div>
+                <div class="col-md-3">
+                  <label for="updateName{{id}}" class="form-label">성함</label>
+                  <input class="form-control" name="updateName{{id}}" oninput='handleOnInput(this, 15);' autocomplete='off' id="updateName{{id}}"/>
+                </div>
+                <div class="col-md-3">
+                  <br>
+                  <input class="btn btn-primary" type="button" onclick="upc_fn({{id}})" value="고객정보미확인">
+                </div>
+                <div class="col-md-6">
+                  <label for="updateMobile{{id}}" class="form-label">연락처</label>
+                  <input class="form-control" name="updateMobile{{id}}" oninput='isNumber(this); handleOnInput(this, 15);' autocomplete='off' id="updateMobile{{id}}"/>
+                </div>
+                &nbsp;
+                <div class="col-md-6">
+                  <label for="updateAddress{{id}}" class="form-label">도로명주소</label>
+                  <input class="form-control" name="updateAddress{{id}}" oninput='isKor(this); handleOnInput(this, 15);' autocomplete='off' id="updateAddress{{id}}"/>
+
+                </div>
+                <div class="col">
+                  <br>
+                  <input class="btn btn-secondary" type="button" onclick="sample2_execDaumPostcode({{id}})" value="주소찾기">
+                </div>
+                &nbsp;
+                <div class="col-md-6">
+                  <label for="updateJibun{{id}}" class="form-label">지번주소</label>
+                  <input class="form-control" name="updateJibun{{id}}" autocomplete='off' id="updateJibun{{id}}" readonly/>
+                  <span id="guide" style="color:#999;display:none"></span>
+                </div>
+                &nbsp;
+                <div class="col-md-6">
+                  <label for="updateAdd{{id}}" class="form-label">추가주소</label>
+                  <input class="form-control" name="updateAdd{{id}}" oninput='handleOnInput(this, 15);' autocomplete='off' id="updateAdd{{id}}"/>
+                </div>
+                <div class="col-md-3">
+                  <label for="updatePostcode{{id}}" class="form-label">우편번호</label>
+                  <input class="form-control" name="updatePostcode{{id}}" autocomplete='off' id="updatePostcode{{id}}" readonly/>
+                </div>
+                &nbsp;
+              </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="update-fn">확인</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="update_cn({{id}})">취소</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </table>
+  </script>
+
+  <script th:inline="javascript">
+
+    const list_cn = () => {
+      $("#modal_list").modal("hide");
+      $('body').removeClass('modal-open');
+      $('.modal-backdrop').remove();
+    }
+
+    //수정
+    const read_fn = (id) => {
+      $("#modal_update"+ id).modal("show");
+      $.ajax({
+        type: "get",
+        data: {
+          id
+        },
+        url: "/customer/findById",
+        success: function (data) {
+          console.log(data)
+          document.querySelector(`[name='updatePhone${id}']`).value = data.customerPhone;
+          document.querySelector(`[name='updateName${id}']`).value = data.customerName;
+          document.querySelector(`[name='updateMobile${id}']`).value = data.customerMobile;
+          document.querySelector(`[name='updateAddress${id}']`).value = data.customerAddress1;
+          document.querySelector(`[name='updateAdd${id}']`).value = data.customerAddress2;
+          document.querySelector(`[name='updateJibun${id}']`).value = data.jibun;
+          document.querySelector(`[name='updatePostcode${id}']`).value = data.postCode;
+          $("#update-fn").on("click", function(){
+            alert("...")
+            const customerPhone = document.querySelector(`[name='updatePhone${id}']`).value
+            const customerMobile = document.querySelector(`[name='updateMobile${id}']`).value
+            const customerName = document.querySelector(`[name='updateName${id}']`).value
+            const customerAddress1 = document.querySelector(`[name='updateAddress${id}']`).value
+            const customerAddress2 = document.querySelector(`[name='updateAdd${id}']`).value
+            const jibun = document.querySelector(`[name='updateJibun${id}']`).value
+            const postCode = document.querySelector(`[name='updatePostcode${id}']`).value
+          if(customerPhone==""){
+            $(frm5.updatePhone).focus();
+          } else if (customerName == "") {
+            alert("이름입력바람!")
+            $(frm5.updateName).focus();
+          } else {
+          $.ajax({
+            type: "put",
+            contentType: "application/json",
+            data: JSON.stringify({
+              id, customerPhone, customerMobile, customerName, customerAddress1, customerAddress2, jibun, postCode
+            }),
+            url: "/customer/update",
+            success:function (data){
+              $("#modal_update"+ id).modal("hide");
+              const temp = Handlebars.compile($("#temp_cus").html());
+              $("#div_cus").html(temp(data));
+            }
+          })
+          }
+          })
+        }
+      });
+    }
+
+
+    //리스트 페이지에서 새로 등록
+    const updateInsert_fn = () => {
+      const customerPhone = $("#div_cus .tr").attr("customerPhone");
+      $("#modal_list").modal("hide");
+      $(frm4.inputPhone).val(customerPhone);
+      $("#modal_insert").modal("show");
+    }
+
+    const update_cn = (id) => {
+      $("#modal_update"+ id).modal("hide");
+    }
+
+    const upc_fn = (id) => {
+      document.querySelector(`[name='updateName${id}']`).value = "고객정보미확인";
+      document.querySelector(`[name='updateMobile${id}']`).value = "";
+      document.querySelector(`[name='updateAddress${id}']`).value = "";
+      document.querySelector(`[name='updateAdd${id}']`).value = "";
+      document.querySelector(`[name='updateJibun${id}']`).value = "";
+      document.querySelector(`[name='updatePostcode${id}']`).value = "";
+    }
+
+
+
+
+    function sample2_execDaumPostcode(id) {
+      new daum.Postcode({
+        oncomplete: function(data) {
+          // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+          // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+          // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+          var roadAddr = data.roadAddress; // 도로명 주소 변수
+          var extraRoadAddr = ''; // 참고 항목 변수
+
+          // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+          // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+          if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+            extraRoadAddr += data.bname;
+          }
+          // 건물명이 있고, 공동주택일 경우 추가한다.
+          if(data.buildingName !== '' && data.apartment === 'Y'){
+            extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+          }
+          // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+          if(extraRoadAddr !== ''){
+            extraRoadAddr = ' (' + extraRoadAddr + ')';
+          }
+
+          // 우편번호와 주소 정보를 해당 필드에 넣는다.
+          document.getElementById(`updatePostcode${id}`).value = data.zonecode;
+          document.getElementById(`updateAddress${id}`).value = roadAddr;
+          document.getElementById(`updateJibun${id}`).value = data.jibunAddress;
+
+          // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+          if(roadAddr !== ''){
+            document.getElementById(`updateAddress${id}`).value = roadAddr + extraRoadAddr;
+          } else {
+            document.getElementById(`updateAddress${id}`).value = roadAddr + '';
+          }
+
+          var guideTextBox = document.getElementById("guide");
+          // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+          if(data.autoRoadAddress) {
+            var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+            guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+            guideTextBox.style.display = 'block';
+
+          } else if(data.autoJibunAddress) {
+            var expJibunAddr = data.autoJibunAddress;
+            guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+            guideTextBox.style.display = 'block';
+          } else {
+            guideTextBox.innerHTML = '';
+            guideTextBox.style.display = 'none';
+          }
+        }
+      }).open();
+    }
+
+  </script>
+</div>
+</body>
+</html>

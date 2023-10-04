@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<!--<div th:replace="~{component/header :: header}"></div>-->
+<!--<div th:replace="~{component/nav :: nav}"></div>-->
+
+<div th:fragment="symptoms" id="symptoms">
+  <form>
+    <div class="row">
+      <div class="col-5">
+        <div class="input-group">
+          <span class="input-group-text">상세증상</span>
+            <input type="text" class="form-control" list="selectList" id="select-id" name="selectSymptoms"
+                   maxlength='16'>
+            <datalist id="selectList">
+            </datalist>
+          </select>
+        </div>
+      </div>
+      </div>
+    <div class="row">
+      <div class="col-8">
+        <input class="form-control">
+      </div>
+    </div>
+  </form>
+
+  <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas bottom</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body small">
+      <button class="btn btn-secondary btn-sm">수리이력</button>
+      <button class="btn btn-secondary btn-sm">보유제품</button>
+      <button class="btn btn-secondary btn-sm">증상확인</button>
+    </div>
+  </div>
+
+
+
+  <script th:inline="javascript">
+
+
+    // getOff();
+    //
+    // function getOff(){
+    //   if($("#select-id").is("selected")){
+    //     alert("....")
+    //   }
+    // };
+  </script>
+</div>
+</body>
+</html>

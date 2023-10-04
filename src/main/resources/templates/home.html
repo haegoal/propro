@@ -16,11 +16,72 @@
     <div th:replace="~{main/customer :: customer}"></div>
     </div>
   </div>
+  <div class="row mt-2">
+    <div class="col">
+    <div th:replace="~{main/symptoms :: symptoms}"></div>
+      </div>
+      <div class="col-2">
+        <select class="form-select" name="issue">
+          <option></option>
+          <option value="report">언론보도</option>
+          <option value="pl">PL</option>
+          <option value="issue">기타이슈</option>
+        </select>
+      </div>
+      <div class="col-2">
+        <select class="form-select" name="select" id="select">
+          <option value="skill" selected>기술상담</option>
+          <option value="as">서비스접수</option>
+        </select>
+      </div>
+    </div>
+  <div id="content-container"></div>
+
 </div>
-
 <div th:replace="~{component/footer :: footer}"></div>
-
 </body>
 <script th:inLine="javascript">
+
+  $(document).ready(function() {
+    const selectedOption = document.getElementById("select").value;
+    if (selectedOption === "skill") {
+      loadSkillPage();
+    } else if (selectedOption === "as") {
+      loadAsPage();
+    }
+  });
+
+    $("#select").change(function() {
+      const selectedOption = $(this).val();
+      if (selectedOption === "skill") {
+        loadSkillPage();
+      } else if (selectedOption === "as") {
+        loadAsPage();
+      }
+    });
+
+    // 기술상담 페이지 로드
+    function loadSkillPage() {
+      $.ajax({
+        url: "/skill", // 스킬 페이지의 URL을 여기에 입력
+        method: "GET", // HTTP 요청 메서드 (GET 또는 POST)
+        success: function(data) {
+          $("#content-container").html(data);
+        }
+      });
+    }
+
+    // 서비스접수 페이지 로드
+    function loadAsPage() {
+      $.ajax({
+        url: "/as", // 서비스접수 페이지의 URL을 여기에 입력
+        method: "GET", // HTTP 요청 메서드 (GET 또는 POST)
+        success: function(data) {
+          $("#content-container").html(data);
+        }
+      });
+    }
+
+
 </script>
 </html>
